@@ -49,7 +49,7 @@ export const postTask = async (req, res) => {
         deadline: deadline
     });
 
-    res.json( newTask ).status(201);
+    res.json({ message: "Tarea creada" }).status(201);
     
 }
 
@@ -101,7 +101,7 @@ export const putTask = async (req, res) => {
 
     await task.save();
 
-    res.json( task ).status(200);
+    res.json({ message: "Tarea actualizada" }).status(200);
 
 };
 

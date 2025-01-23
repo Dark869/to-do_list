@@ -1,19 +1,11 @@
 import User from '../models/user.model.js';
 import Auth_data from '../models/authData.model.js';
-import Task from '../models/task.model.js';
 import { hashPasswd, generateSalt } from '../utils/hashPasswd.js';
 import { generateToken } from '../utils/manageToken.js';
 
 const haveUppercase = /[A-Z]/;
 const haveNumber = /[0-9]/;
 const haveSpecialSymbol = /[!@#$%^&.*]/;
-
-export const getAddUser = async (req, res) => {
-    const users = await User.findAll();
-    const authData = await Auth_data.findAll();
-    const tasks = await Task.findAll();
-    res.json({users, authData, tasks}).status(200);
-};
 
 export const postSignUp = async (req, res) => {
     const { full_name, username, email, password } = req.body;
@@ -55,7 +47,7 @@ export const postSignUp = async (req, res) => {
             salt: salt
         });
 
-        res.json({newUser, addPassword}).status(201);
+        res.json({ message: "Usuario creado"}).status(201);
 
     } catch (err) {
         res.status(500).json({ message: `${err}, No se pueden repetir usuario o email` });

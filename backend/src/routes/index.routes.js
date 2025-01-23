@@ -1,7 +1,6 @@
 import { Router } from 'express';
 
 import {
-    getAddUser,
     postSignUp,
     postSignIn,
     postSignOut
@@ -9,8 +8,6 @@ import {
 import verifyToken from '../middlewares/verifyToken.js';
 
 const router = Router();
-
-router.get('/', getAddUser);
 
 router.post('/signup', postSignUp);
 
