@@ -1,16 +1,21 @@
 import { Router } from 'express';
+
 import {
     getAddUser,
-    postAddUser,
-    postSignIn
+    postSignUp,
+    postSignIn,
+    postSignOut
 } from '../controllers/index.controller.js';
+import verifyToken from '../middlewares/verifyToken.js';
 
 const router = Router();
 
 router.get('/', getAddUser);
 
-router.post('/', postAddUser);
+router.post('/signup', postSignUp);
 
 router.post('/signin', postSignIn);
+
+router.post('/signout', verifyToken, postSignOut);
 
 export default router;

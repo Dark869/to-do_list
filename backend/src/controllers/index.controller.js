@@ -1,16 +1,42 @@
 import User from '../models/user.model.js';
 import Auth_data from '../models/authData.model.js';
+import Task from '../models/task.model.js';
 import { hashPasswd, generateSalt } from '../utils/hashPasswd.js';
-import generateToken from '../utils/generateToken.js';
+import { generateToken } from '../utils/manageToken.js';
+
+const haveUppercase = /[A-Z]/;
+const haveNumber = /[0-9]/;
+const haveSpecialSymbol = /[!@#$%^&.*]/;
 
 export const getAddUser = async (req, res) => {
     const users = await User.findAll();
     const authData = await Auth_data.findAll();
-    res.send({users, authData}).status(200);
+    const tasks = await Task.findAll();
+    res.json({users, authData, tasks}).status(200);
 };
 
-export const postAddUser = async (req, res) => {
+export const postSignUp = async (req, res) => {
     const { full_name, username, email, password } = req.body;
+
+    if (!full_name || !username || !email || !password) {
+        return res.status(400).json({ message: 'Faltan datos' });
+    }
+
+    if (password.length < 8) {
+        return res.status(400).json({ message: 'La contraseña debe tener al menos 8 caracteres' });
+    };
+
+    if (!haveUppercase.test(password)) {
+        return res.status(400).json({ message: 'La contraseña debe tener al menos una letra mayuscula' });
+    };
+
+    if (!haveNumber.test(password)) {
+        return res.status(400).json({ message: 'La contraseña debe tener al menos un numero' });
+    };
+
+    if (!haveSpecialSymbol.test(password)) {
+        return res.status(400).json({ message: 'La contraseña debe tener al menos un simbolo especial de los siguientes: !, @, #, $, %, ^, &, *.'});
+    };
 
     try {
         const newUser = await User.create({
@@ -29,10 +55,10 @@ export const postAddUser = async (req, res) => {
             salt: salt
         });
 
-        res.send({newUser, addPassword}).status(201);
+        res.json({newUser, addPassword}).status(201);
 
     } catch (err) {
-        res.status(500).send({ message: `${err}, No se pueden repetir usuario o email` });
+        res.status(500).json({ message: `${err}, No se pueden repetir usuario o email` });
     }
     
 };
@@ -41,7 +67,15 @@ export const postSignIn = async (req, res) => {
     const { username, password } = req.body;
 
     if (!username || !password) {
-        res.status(400).send({ message: 'Faltan datos' });
+        return res.status(400).json({ message: 'Faltan datos' });
+    }
+
+    if (!haveSpecialSymbol.test(username)) {
+        return res.status(400).json({ message: 'El nombre de usuario no puede tener simbolos especiales'});
+    };
+
+    if (!haveSpecialSymbol.test(password)) {
+        return res.status(400).json({ message: 'Contraseña incorrecta'});
     }
 
     const searchUser = await User.findOne({
@@ -57,7 +91,7 @@ export const postSignIn = async (req, res) => {
     });
 
     if (!searchUser || !searchAuthData) {
-        res.status(404).send({ message: 'Usuario no encontrado' });
+        return res.status(404).json({ message: 'Usuario no encontrado' });
     }
 
     const passwd = hashPasswd(password, searchAuthData.salt);
@@ -68,11 +102,17 @@ export const postSignIn = async (req, res) => {
             httpOnly: true,
             secure: false,
             sameSite: 'strict',
-            maxAge: 1000 * 60 * 60
+            maxAge: 1000 * 60 * 60 * 24
         });
 
-        res.send({ message: 'Login correcto' }).status(200)
+        res.json({ message: 'Login correcto' }).status(200)
     } else {
-        res.status(401).send({ message: 'Contraseña incorrecta' });
+        res.status(401).json({ message: 'Contraseña incorrecta' });
     }
+};
+
+export const postSignOut = async (req, res) => {
+    res.clearCookie('access_token')
+        .json({ message: 'Logout correcto' })
+        .status(200);
 };
