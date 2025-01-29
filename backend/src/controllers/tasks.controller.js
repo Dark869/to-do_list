@@ -62,9 +62,9 @@ export const putTask = async (req, res) => {
         return res.status(400).json({ message: 'Faltan datos' });
     }
 
-    if (!title) {
+    /*if (!title) {
         return res.status(400).json({ message: 'La tarea debe tener al menos el titulo' });
-    }
+    }*/
 
     const user = await User.findOne({
         where: {

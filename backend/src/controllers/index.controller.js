@@ -62,7 +62,7 @@ export const postSignIn = async (req, res) => {
         return res.status(400).json({ message: 'Faltan datos' });
     }
 
-    if (!haveSpecialSymbol.test(username)) {
+    if (haveSpecialSymbol.test(username)) {
         return res.status(400).json({ message: 'El nombre de usuario no puede tener simbolos especiales'});
     };
 

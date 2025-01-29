@@ -1,6 +1,7 @@
 import express from 'express';
 import morgan from 'morgan';
 import cookieParser from 'cookie-parser';
+import cors from 'cors';
 
 import indexRoutes from './src/routes/index.routes.js';
 import tasksRoutes from './src/routes/tasks.routes.js';
@@ -14,6 +15,13 @@ export const app = express();
 app.use(morgan('dev'));
 app.use(express.json());
 app.use(cookieParser());
+app.use(
+    cors({
+        origin: 'http://localhost:5173',
+        methods: ['GET', 'POST', 'PUT', 'DELETE'],
+        credentials: true,
+        allowedHeaders: ['Content-Type', 'Authorization']
+    }));
 
 //Routes
 app.use(indexRoutes);
