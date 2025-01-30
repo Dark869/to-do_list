@@ -37,3 +37,25 @@ export const checkTaskUpdate = async (taskId, isReady) => {
         throw error;
       }
 };
+
+export const createTask = async (taskData) => {
+  try {
+    const response = await fetch("http://localhost:3000/newTask", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      credentials: "include",
+      body: JSON.stringify(taskData),
+    });
+
+    if (!response.ok) {
+      throw new Error("Error al crear la tarea");
+    }
+
+    return response.json();
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+};

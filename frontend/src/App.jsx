@@ -1,43 +1,16 @@
-import { useEffect, useState } from "react";
-import TaskCard from "./components/TaskCard";
-import NavBar from "./components/NavBar";
-import CreateTaskBottom from "./components/CreateTaskBottom";
-import "./App.css";
-import "./index.css";
-import { fetchTasks } from "./utils/Api/tasksPage.api";
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+
+import TasksPage from './pages/TasksPage';
+import SinginPage from './pages/SigninPage';
 
 function App() {
-  const [tasks, setTasks] = useState([]);
-  const [error, setError] = useState(null);
-
-  useEffect(() => {
-    const loadTasks = async () => {
-      try {
-        const tasks = await fetchTasks();
-        setTasks(tasks);
-      } catch (error) {
-        setError(error.message);
-      }
-    };
-
-    loadTasks();
-  }, []);
-
   return (
-    <div className="bg-zinc-800 min-h-screen">
-      <NavBar />
-      <div className="flex flex-wrap justify-center gap-4">
-        {tasks.length === 0 ? (
-          <p className="text-white">
-            Actualmente no tienes tareas creadas{" "}
-            {error && <span className="text-red-500">{error}</span>}
-          </p>
-        ) : (
-          tasks.map((task) => <TaskCard key={task.id} task={task} />)
-        )}
-      </div>
-      <CreateTaskBottom />
-    </div>
+    <Router>
+        <Routes>
+          <Route path='/' element={<TasksPage />} />
+          <Route path='/signin' element={<SinginPage />} />
+        </Routes>
+    </Router>
   );
 }
 

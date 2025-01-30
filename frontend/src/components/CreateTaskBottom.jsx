@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { createTask } from "../utils/Api/tasksPage.api";
 
 function CreateTaskBottom() {
   const [showModal, setShowModal] = useState(false);
@@ -18,16 +19,8 @@ function CreateTaskBottom() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const response = await fetch("http://localhost:3000/newTask", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      credentials: "include",
-      body: JSON.stringify(taskData),
-    });
-
-    if (response.ok) {
+    const result = await createTask(taskData);
+    if (result) {
       console.log("Tarea creada con éxito");
       setShowModal(false);
       window.location.reload();
@@ -69,7 +62,6 @@ function CreateTaskBottom() {
               placeholder="Descripción de la tarea"
               value={taskData.description}
               onChange={handleChange}
-              required
             ></textarea>
             <div className="grid justify-items-center">
               <input
@@ -110,3 +102,4 @@ function CreateTaskBottom() {
 }
 
 export default CreateTaskBottom;
+
