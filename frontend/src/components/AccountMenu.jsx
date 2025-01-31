@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import Box from "@mui/material/Box";
 import Avatar from "@mui/material/Avatar";
 import Menu from "@mui/material/Menu";
@@ -52,7 +53,7 @@ export default function AccountSettings() {
           <MenuItem onClick={handleClose}>Terminadas</MenuItem>
           <MenuItem onClick={handleClose}>Por hacer</MenuItem>
         </div>
-        <MenuItem onClick={handleClose}>Ajustes</MenuItem>
+        <MenuItem onClick={handleClose}><Link to={'/settings'}>Ajustes</Link></MenuItem>
         <MenuItem onClick={handleClose}>Cerrar sesión</MenuItem>
       </Menu>
     </>
