@@ -1,6 +1,6 @@
 @import "tailwindcss";
 
-#navbar {
+#navbar, #signinButton {
     background-color: #75b8ff;
 }
 

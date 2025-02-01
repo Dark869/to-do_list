@@ -23,7 +23,7 @@ function TaskCard({ task }) {
   return (
     <div className="task-card border-2 border-black rounded-lg m-2 px-5 py-2 bg-neutral-600 w-xs min-h-16 h-32 max-h-32 flex flex-col justify-between">
       <div>
-        <h3 className="text-xl text-white">
+        <h3 className="text-xl text-white line-clamp-1">
           <strong>{task.title}</strong>
         </h3>
         <p className="text-white line-clamp-2">{task.description}</p>
