@@ -8,7 +8,8 @@ export const signin = async (data) => {
         credentials: "include",
     });
     if (response.ok) {
-        return true;
+        const userData = await response.json();
+        return userData;
     } else {
         return false;
     }
@@ -39,6 +40,21 @@ export const signout = async () => {
     });
     if (response.ok) {
         return true;
+    } else {
+        return false;
+    }
+};
+
+export const verifyToken = async () => {
+    const response = await fetch("http://localhost:3000/verifyToken", {
+        method: "POST",
+        headers: {
+        "Content-Type": "application/json",
+        },
+        credentials: "include",
+    });
+    if (response.ok) {
+        return response.json();
     } else {
         return false;
     }

@@ -8,9 +8,11 @@ import IconButton from "@mui/material/IconButton";
 import Tooltip from "@mui/material/Tooltip";
 import imageDefault from "../assets/user.png";
 
+import { useAuth } from '../contexts/AuthContext';
 import { signout } from "../utils/Api/auth.api";
 
 export default function AccountSettings() {
+  const { logout } = useAuth();
   const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
   const handleClick = (event) => {
@@ -25,6 +27,7 @@ export default function AccountSettings() {
   const handleSignOut = async () => {
     const response = await signout();
     if (response) {
+      logout();
       navigate("/signin");
     }
   };

@@ -3,10 +3,12 @@ import { useNavigate, Link } from "react-router-dom";
 import "../App.css";
 
 import { signin } from "../utils/Api/auth.api.js";
+import { useAuth } from "../contexts/AuthContext";
 import HeaderNoProtectedPages from "../components/HeaderNoProtectedPages";
 
 function SigninPage() {
   const navigate = useNavigate();
+  const { setUser } = useAuth();
 
   const [data, setData] = useState({
     username: "",
@@ -25,6 +27,7 @@ function SigninPage() {
     e.preventDefault();
     const result = await signin(data);
     if (result) {
+      setUser(result);
       navigate("/");
     } else {
       console.error("Error al iniciar sesión");

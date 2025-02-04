@@ -2,6 +2,8 @@ import User from '../models/user.model.js';
 import Auth_data from '../models/authData.model.js';
 import { hashPasswd, generateSalt } from '../utils/hashPasswd.js';
 import { generateToken } from '../utils/manageToken.js';
+import { JWT_SECRET } from '../config/envConfig.js';
+import jwt from 'jsonwebtoken';
 
 const haveUppercase = /[A-Z]/;
 const haveNumber = /[0-9]/;
@@ -107,4 +109,18 @@ export const postSignOut = async (req, res) => {
     res.clearCookie('access_token')
         .json({ message: 'Logout correcto' })
         .status(200);
+};
+
+export const postVerifyToken = async (req, res) => {
+    try {
+        const token = req.cookies.access_token;
+        if (!token) {
+            return res.status(401).json({ message: "No token provided" });
+        }
+        
+        const decoded = jwt.verify(token, JWT_SECRET);
+        res.status(200).json({ user: decoded });
+    } catch (error) {
+        res.status(403).json({ message: "Invalid token" });
+    }
 };
