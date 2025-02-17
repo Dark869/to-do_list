@@ -8,9 +8,8 @@ import verifyToken from '../middlewares/verifyToken.js';
 
 const router = Router();
 
-router.get('/settings', verifyToken, getUserData);
+router.get('/user', verifyToken, getUserData);
 
-router.put('/settings', verifyToken, putUpdateUserData);
+router.put('/user', verifyToken, putUpdateUserData);
 
 export default router;
-

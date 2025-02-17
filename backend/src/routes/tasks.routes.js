@@ -12,10 +12,10 @@ const router = Router();
 
 router.get('/tasks', verifyToken, getTasks);
 
-router.post('/newTask', verifyToken, postTask);
+router.post('/task', verifyToken, postTask);
 
-router.put('/updateTask/:id', verifyToken, putTask);
+router.put('/task/:id', verifyToken, putTask);
 
-router.delete('/deleteTask/:id', verifyToken, deleteTask);
+router.delete('/task/:id', verifyToken, deleteTask);
 
 export default router;

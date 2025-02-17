@@ -11,7 +11,7 @@ export const getTasks = async (req, res) => {
     });
 
     if (!userDB) {
-        return res.status(404).json({ message: 'Usuario no encontrado' });
+        return res.status(404).json({ success: false, error: 'Usuario no encontrado.' });
     }
 
     const tasks = await Task.findAll({
@@ -20,7 +20,7 @@ export const getTasks = async (req, res) => {
         }
     });
 
-    res.json( tasks ).status(200);
+    res.status(200).json({ success: true, data: tasks, message: "Tareas recuperadas con exito." });
 };
 
 export const postTask = async (req, res) => {
@@ -28,7 +28,7 @@ export const postTask = async (req, res) => {
     const username = req.user.username;
 
     if (!title) {
-        return res.status(400).json({ message: 'Faltan datos' });
+        return res.status(400).json({ success: false, error: 'Faltan datos.' });
     }
 
     const userDB = await User.findOne({
@@ -38,7 +38,7 @@ export const postTask = async (req, res) => {
     });
 
     if (!userDB) {
-        return res.status(404).json({ message: 'Usuario no encontrado' });
+        return res.status(404).json({ success: false, error: 'Usuario no encontrado.' });
     }
 
     const newTask = await Task.create({
@@ -49,7 +49,7 @@ export const postTask = async (req, res) => {
         deadline: deadline
     });
 
-    res.json({ message: "Tarea creada" }).status(201);
+    res.status(201).json({ success: true, message: "Tarea creada." });
     
 }
 
@@ -59,11 +59,11 @@ export const putTask = async (req, res) => {
     const { title, description, isReady } = req.body;
 
     if (!id) {
-        return res.status(400).json({ message: 'Faltan datos' });
+        return res.status(400).json({ success: false, error: 'Faltan datos.' });
     }
 
     /*if (!title) {
-        return res.status(400).json({ message: 'La tarea debe tener al menos el titulo' });
+        return res.status(400).json({ success: false, error: 'La tarea debe tener al menos el titulo' });
     }*/
 
     const user = await User.findOne({
@@ -73,7 +73,7 @@ export const putTask = async (req, res) => {
     });
 
     if (!user) {
-        return res.status(404).json({ message: 'Usuario no encontrado' });
+        return res.status(404).json({ success: false, error: 'Usuario no encontrado.' });
     }
 
     const task = await Task.findOne({
@@ -84,7 +84,7 @@ export const putTask = async (req, res) => {
     });
 
     if (!task) {
-        return res.status(404).json({ message: 'Tarea no encontrada' });
+        return res.status(404).json({ success: false, error: 'Tarea no encontrada.' });
     }
 
     if (title) {
@@ -101,7 +101,7 @@ export const putTask = async (req, res) => {
 
     await task.save();
 
-    res.json({ message: "Tarea actualizada" }).status(200);
+    res.status(200).json({ success: true, message: "Tarea actualizada." });
 
 };
 
@@ -110,7 +110,7 @@ export const deleteTask = async (req, res) => {
     const username = req.user.username;
 
     if (!id) {
-        return res.status(400).json({ message: 'Faltan datos' });
+        return res.status(400).json({ success: false, error: 'Faltan datos.' });
     }
 
     const user = await User.findOne({
@@ -120,7 +120,7 @@ export const deleteTask = async (req, res) => {
     });
 
     if (!user) {
-        return res.status(404).json({ message: 'Usuario no encontrado' });
+        return res.status(404).json({ success: false, error: 'Usuario no encontrado.' });
     }
 
     const task = await Task.findOne({
@@ -131,11 +131,11 @@ export const deleteTask = async (req, res) => {
     });
 
     if (!task) {
-        return res.status(404).json({ message: 'Tarea no encontrada' });
+        return res.status(404).json({ success: false, error: 'Tarea no encontrada.' });
     }
 
     await task.destroy();
 
-    res.json({ message: 'Tarea eliminada' }).status(200);
+    res.status(200).json({ success: true, message: 'Tarea eliminada con exito.' });
 
 };

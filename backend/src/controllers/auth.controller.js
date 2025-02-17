@@ -13,23 +13,23 @@ export const postSignUp = async (req, res) => {
     const { full_name, username, email, password } = req.body;
 
     if (!full_name || !username || !email || !password) {
-        return res.status(400).json({ message: 'Faltan datos' });
+        return res.status(400).json({ success: false, error: 'Faltan datos.' });
     }
 
     if (password.length < 8) {
-        return res.status(400).json({ message: 'La contraseña debe tener al menos 8 caracteres' });
+        return res.status(400).json({ success: false, error: 'La contraseña debe tener al menos 8 caracteres.' });
     };
 
     if (!haveUppercase.test(password)) {
-        return res.status(400).json({ message: 'La contraseña debe tener al menos una letra mayuscula' });
+        return res.status(400).json({ success: false, error: 'La contraseña debe tener al menos una letra mayuscula.' });
     };
 
     if (!haveNumber.test(password)) {
-        return res.status(400).json({ message: 'La contraseña debe tener al menos un numero' });
+        return res.status(400).json({ success: false, error: 'La contraseña debe tener al menos un numero.' });
     };
 
     if (!haveSpecialSymbol.test(password)) {
-        return res.status(400).json({ message: 'La contraseña debe tener al menos un simbolo especial de los siguientes: !, @, #, $, %, ^, &, *.'});
+        return res.status(400).json({ success: false, error: 'La contraseña debe tener al menos un simbolo especial de los siguientes: !, @, #, $, %, ^, &, *.'});
     };
 
     try {
@@ -49,10 +49,10 @@ export const postSignUp = async (req, res) => {
             salt: salt
         });
 
-        res.json({ message: "Usuario creado"}).status(201);
+        res.status(201).json({ success: true, message: "Usuario creado exitosamente."});
 
     } catch (err) {
-        res.status(500).json({ message: `${err}, No se pueden repetir usuario o email` });
+        res.status(500).json({ success: false, error: `${err}, No se pueden repetir usuario o email.` });
     }
     
 };
@@ -61,15 +61,15 @@ export const postSignIn = async (req, res) => {
     const { username, password } = req.body;
 
     if (!username || !password) {
-        return res.status(400).json({ message: 'Faltan datos' });
+        return res.status(400).json({ success: false, error: 'Faltan datos.' });
     }
 
     if (haveSpecialSymbol.test(username)) {
-        return res.status(400).json({ message: 'El nombre de usuario no puede tener simbolos especiales'});
+        return res.status(400).json({ success: false, error: 'El nombre de usuario no puede tener simbolos especiales.'});
     };
 
     if (!haveSpecialSymbol.test(password)) {
-        return res.status(400).json({ message: 'Contraseña incorrecta'});
+        return res.status(400).json({ success: false, error: 'Contraseña incorrecta.'});
     }
 
     const searchUser = await User.findOne({
@@ -85,7 +85,7 @@ export const postSignIn = async (req, res) => {
     });
 
     if (!searchUser || !searchAuthData) {
-        return res.status(404).json({ message: 'Usuario no encontrado' });
+        return res.status(404).json({ success: false, error: 'Usuario no encontrado.' });
     }
 
     const passwd = hashPasswd(password, searchAuthData.salt);
@@ -99,28 +99,28 @@ export const postSignIn = async (req, res) => {
             maxAge: 1000 * 60 * 60 * 24
         });
 
-        res.json({ message: 'Login correcto' }).status(200)
+        res.status(200).json({ success: true, message: 'Inicio de sesión exitoso.' });
     } else {
-        res.status(401).json({ message: 'Contraseña incorrecta' });
+        res.status(401).json({ success: false, error: 'Contraseña incorrecta.' });
     }
 };
 
 export const postSignOut = async (req, res) => {
-    res.clearCookie('access_token')
-        .json({ message: 'Logout correcto' })
-        .status(200);
+    res.status(200)
+        .clearCookie('access_token')
+        .json({ success: true, message: 'Se cerro la sesión correctamente.' });
 };
 
 export const postVerifyToken = async (req, res) => {
     try {
         const token = req.cookies.access_token;
         if (!token) {
-            return res.status(401).json({ message: "No token provided" });
+            return res.status(401).json({ success: false, error: "No token provided." });
         }
         
         const decoded = jwt.verify(token, JWT_SECRET);
-        res.status(200).json({ user: decoded });
+        res.status(200).json({ success: true, data: decoded, message: "Token valido." });
     } catch (error) {
-        res.status(403).json({ message: "Invalid token" });
+        res.status(403).json({ success: false, error: "Invalid token." });
     }
 };

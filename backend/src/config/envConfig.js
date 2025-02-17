@@ -1,6 +1,7 @@
 //Set the environment variables for the application
 export const PORT = process.env.PORT;
 export const URI = process.env.URI;
+export const URL_FRONTEND = process.env.URL_FRONTEND;
 
 //Set the environment variables for the database
 export const DB_HOST = process.env.DB_HOST;

@@ -12,10 +12,10 @@ export const getUserData = async (req, res) => {
     });
 
     if (!userDB) {
-        return res.status(404).json({ message: 'Usuario no encontrado' });
+        return res.status(404).json({ success: false, error: 'Usuario no encontrado.' });
     }
 
-    res.json( userDB ).status(200);
+    res.status(200).json({ success: true, data: userDB, message: 'Datos del usuario recuperados correctamente.' });
 };
 
 export const putUpdateUserData = async (req, res) => {
@@ -23,7 +23,7 @@ export const putUpdateUserData = async (req, res) => {
     const { full_name, email, oldPassword, newPassword } = req.body;
 
     if (!full_name || !email || (!oldPassword && !newPassword)) {
-        return res.status(400).json({ message: 'Al menos algun dato se debe actualizar' });
+        return res.status(400).json({ success: false, error: 'Al menos algun dato se debe actualizar.' });
     }
 
     const userDB = await User.findOne({
@@ -33,7 +33,7 @@ export const putUpdateUserData = async (req, res) => {
     });
 
     if (!userDB) {
-        return res.status(404).json({ message: 'Usuario no encontrado' });
+        return res.status(404).json({ success: false, error: 'Usuario no encontrado.' });
     }
 
     const authDataDB = await Auth_data.findOne({
@@ -46,7 +46,7 @@ export const putUpdateUserData = async (req, res) => {
         const hashOldPasswd = hashPasswd(oldPassword, authDataDB.salt);
 
         if (hashOldPasswd !== authDataDB.password) {
-            return res.status(401).json({ message: 'Contraseña incorrecta' });
+            return res.status(401).json({ success: false, error: 'Contraseña incorrecta.' });
         }
 
         const salt = generateSalt();
@@ -82,5 +82,5 @@ export const putUpdateUserData = async (req, res) => {
         });
     }
 
-    res.json({ message: 'Datos actualizados correctamente' }).status(200);
+    res.status(200).json({ success: true, message: 'Datos actualizados correctamente.' });
 };
