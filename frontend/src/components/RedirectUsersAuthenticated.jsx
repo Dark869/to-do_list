@@ -2,9 +2,11 @@ import { Navigate } from "react-router-dom";
 import { useAuth } from "../contexts/AuthContext";
 
 const RedirectIfAuthenticated = ({ children }) => {
-  const { user } = useAuth();
+    const { user, loading } = useAuth();
 
-  return user ? <Navigate to="/" /> : children;
+    if (loading) return null;
+
+    return user ? <Navigate to="/" /> : children;
 };
 
 export default RedirectIfAuthenticated;

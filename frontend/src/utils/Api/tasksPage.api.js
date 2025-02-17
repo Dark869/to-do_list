@@ -1,6 +1,8 @@
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
 export const fetchTasks = async () => {
   try {
-    const response = await fetch("http://localhost:3000/tasks", {
+    const response = await fetch(`${BACKEND_URL}/tasks`, {
       method: "GET",
       credentials: "include",
     });
@@ -17,7 +19,7 @@ export const fetchTasks = async () => {
 
 export const checkTaskUpdate = async (taskId, isReady) => {
     try {
-        const response = await fetch(`http://localhost:3000/updateTask/${taskId}`, {
+        const response = await fetch(`${BACKEND_URL}/task/${taskId}`, {
           method: "PUT",
           credentials: "include",
           headers: {
@@ -40,7 +42,7 @@ export const checkTaskUpdate = async (taskId, isReady) => {
 
 export const createTask = async (taskData) => {
   try {
-    const response = await fetch("http://localhost:3000/newTask", {
+    const response = await fetch(`${BACKEND_URL}/task`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",

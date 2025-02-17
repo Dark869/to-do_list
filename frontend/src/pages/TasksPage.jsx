@@ -4,7 +4,7 @@ import NavBar from "../components/NavBar";
 import CreateTaskBottom from "../components/CreateTaskBottom";
 import "../App.css";
 import "../index.css";
-import { fetchTasks } from "../utils/Api/tasksPage.api";
+import { fetchTasks } from "../utils/Api/tasksPage.api.js";
 
 function TasksPage() {
   const [tasks, setTasks] = useState([]);
@@ -14,7 +14,7 @@ function TasksPage() {
     const loadTasks = async () => {
       try {
         const tasks = await fetchTasks();
-        setTasks(tasks);
+        setTasks(tasks.data);
       } catch (error) {
         setError(error.message);
       }

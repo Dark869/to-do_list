@@ -1,5 +1,5 @@
-import { createContext, useContext, useEffect, useState } from 'react';
-import { verifyToken } from '../utils/Api/auth.api';
+import { createContext, useContext, useEffect, useState } from "react";
+import { verifyToken } from "../utils/Api/auth.api";
 
 const AuthContext = createContext();
 
@@ -7,6 +7,7 @@ export const useAuth = () => useContext(AuthContext);
 
 export const AuthProvider = ({ children }) => {
     const [user, setUser] = useState(null);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         const checkAuth = async () => {
@@ -15,6 +16,8 @@ export const AuthProvider = ({ children }) => {
                 setUser(data);
             } catch {
                 setUser(null);
+            } finally {
+                setLoading(false);
             }
         };
         checkAuth();
@@ -25,7 +28,7 @@ export const AuthProvider = ({ children }) => {
     };
 
     return (
-        <AuthContext.Provider value={{ user, setUser, logout }}>
+        <AuthContext.Provider value={{ user, setUser, logout, loading }}>
             {children}
         </AuthContext.Provider>
     );

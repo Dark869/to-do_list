@@ -1,5 +1,7 @@
+const BACKEND_URL = import.meta.env.VITE_BACKEND_URL;
+
 export const signin = async (data) => {
-    const response = await fetch("http://localhost:3000/signin", {
+    const response = await fetch(`${BACKEND_URL}/auth/signin`, {
         method: "POST",
         headers: {
         "Content-Type": "application/json",
@@ -16,7 +18,7 @@ export const signin = async (data) => {
 };
 
 export const signup = async (data) => {
-    const response = await fetch("http://localhost:3000/signup", {
+    const response = await fetch(`${BACKEND_URL}/auth/signup`, {
         method: "POST",
         headers: {
         "Content-Type": "application/json",
@@ -31,7 +33,7 @@ export const signup = async (data) => {
 };
 
 export const signout = async () => {
-    const response = await fetch("http://localhost:3000/signout", {
+    const response = await fetch(`${BACKEND_URL}/auth/signout`, {
         method: "POST",
         headers: {
         "Content-Type": "application/json",
@@ -46,7 +48,7 @@ export const signout = async () => {
 };
 
 export const verifyToken = async () => {
-    const response = await fetch("http://localhost:3000/verifyToken", {
+    const response = await fetch(`${BACKEND_URL}/auth/verifyToken`, {
         method: "POST",
         headers: {
         "Content-Type": "application/json",
